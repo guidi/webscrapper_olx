@@ -1,5 +1,5 @@
-# webscraper_olx
-WebScraper do OLX BR para buscar anúncios por determinada expressão e enviar por e-mail.</br>
+# webscrapper_olx
+WebScrapper do OLX BR para buscar anúncios por determinada expressão e enviar por e-mail.</br>
 
 1 - Crie as váriáveis de ambiente no windows para a aplicação conseguir enviar o e-mail.</br>
 2 - Altere o arquivo palavras.txt (fica dentro da pasta bin) conforme a sua necessidade. </br>
