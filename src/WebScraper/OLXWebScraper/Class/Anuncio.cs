@@ -2,7 +2,7 @@
 
 namespace OLXWebScraper.Class
 {
-    public class Produto
+    public class Anuncio
     {
         public String Codigo { get; set; }
         public String Titulo { get; set; }

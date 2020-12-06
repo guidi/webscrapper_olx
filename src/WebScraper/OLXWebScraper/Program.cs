@@ -7,6 +7,7 @@ using System.Net;
 using System.Linq;
 using System.Net.Mail;
 using System.Text;
+using OLXWebScraper.Service;
 
 namespace OLXWebScraper
 {
@@ -103,23 +104,7 @@ namespace OLXWebScraper
             var remetente = Environment.GetEnvironmentVariable("OLX_SCRAPPER_REMETENTE_EMAIL");
             var senha = Environment.GetEnvironmentVariable("OLX_SCRAPPER_SENHA_EMAIL");
 
-            using (SmtpClient client = new SmtpClient())
-            {
-                client.Port = PortaInt;
-                client.Host = host;
-                client.EnableSsl = true;
-                client.Timeout = 15000;
-
-                client.DeliveryMethod = SmtpDeliveryMethod.Network;
-                client.UseDefaultCredentials = false;
-                client.Credentials = new NetworkCredential(usuario, senha);
-                
-                MailMessage mm = new MailMessage(remetente, destinatario, assuntoEmail, SBMensagem.ToString());
-                mm.IsBodyHtml = true;
-                mm.BodyEncoding = UTF8Encoding.UTF8;
-                mm.DeliveryNotificationOptions = DeliveryNotificationOptions.OnFailure;
-                client.Send(mm);
-            }
+            EmailService.EnviarEmail(assuntoEmail, SBMensagem.ToString());
         }
 
         private static List<Anuncio> ObterListaDeNovosAnuncios(HtmlNode elemento, List<string> codigosAnunciosExistentes)
@@ -129,24 +114,37 @@ namespace OLXWebScraper
             foreach (var node in elemento.ChildNodes)
             {
                 //To-do: Buscar pelo XPath
-                var titulo = node.ChildNodes[0].Attributes["title"].Value;
-                var codigo = node.ChildNodes[0].Attributes["data-lurker_list_id"].Value;
-                var link = node.ChildNodes[0].Attributes["href"].Value;
-                var valor = node.ChildNodes[0].ChildNodes[0].ChildNodes[1].ChildNodes[0].ChildNodes[1].ChildNodes[1].ChildNodes[0].ChildNodes[0].ChildNodes[0].InnerText;
-                var dataPublicacao = node.ChildNodes[0].ChildNodes[0].ChildNodes[1].ChildNodes[0].ChildNodes[1].ChildNodes[3].ChildNodes[0].InnerText;
-
-                //Se o anúncio não existe no txt, adiciona na lista
-                if (!codigosAnunciosExistentes.Contains(codigo))
+                if (!String.IsNullOrEmpty(node.InnerHtml))
                 {
-                    var anuncio = new Anuncio();
-                    anuncio.Codigo = codigo;
-                    anuncio.Titulo = titulo;
-                    anuncio.Link = link;
-                    anuncio.Valor = valor;
-                    anuncio.DataPublicacao = dataPublicacao;
+                    var titulo = node.ChildNodes[0].Attributes["title"].Value;
+                    var codigo = node.ChildNodes[0].Attributes["data-lurker_list_id"].Value;
+                    var link = node.ChildNodes[0].Attributes["href"].Value;
+                    var valor = String.Empty;
+                    try
+                    {
+                        valor = node.ChildNodes[0].ChildNodes[0].ChildNodes[1].ChildNodes[0].ChildNodes[1].ChildNodes[1].ChildNodes[0].ChildNodes[0].ChildNodes[0].InnerText;
+                    }
+                    catch (Exception)
+                    {
+                        valor = "Produto sem valor";
+                    }
 
-                    AnunciosEncontrados.Add(anuncio);
+                    var dataPublicacao = node.ChildNodes[0].ChildNodes[0].ChildNodes[1].ChildNodes[0].ChildNodes[1].ChildNodes[3].ChildNodes[0].InnerText;
+
+                    //Se o anúncio não existe no txt, adiciona na lista
+                    if (!codigosAnunciosExistentes.Contains(codigo))
+                    {
+                        var anuncio = new Anuncio();
+                        anuncio.Codigo = codigo;
+                        anuncio.Titulo = titulo;
+                        anuncio.Link = link;
+                        anuncio.Valor = valor;
+                        anuncio.DataPublicacao = dataPublicacao;
+
+                        AnunciosEncontrados.Add(anuncio);
+                    }
                 }
+
             }
 
             return AnunciosEncontrados;
