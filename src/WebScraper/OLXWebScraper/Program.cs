@@ -82,7 +82,7 @@ namespace OLXWebScraper
 
         private static void EnviarEmailAnunciosEncontrados(List<Anuncio> anunciosEncontrados, String expressao)
         {
-            var assuntoEmail = "[OLX Scrapper] Anúncios encontrados para a expresão: " + expressao +  " - " + String.Format("{0:dd/MM/yyyy HH:mm}", DateTime.Now);
+            var assuntoEmail = "[OLX Scrapper] Anúncios encontrados para a expressão: " + expressao +  " - " + String.Format("{0:dd/MM/yyyy HH:mm}", DateTime.Now);
             StringBuilder SBMensagem = new StringBuilder();
 
             foreach (var anuncio in anunciosEncontrados)
