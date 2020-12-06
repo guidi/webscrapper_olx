@@ -87,12 +87,12 @@ namespace OLXWebScraper
 
             foreach (var anuncio in anunciosEncontrados)
             {
-                SBMensagem.AppendLine("Código: " + anuncio.Codigo);
-                SBMensagem.AppendLine("Título: " + anuncio.Titulo);
-                SBMensagem.AppendLine("Link: " + "<a href= \"" + anuncio.Link + "\"" + " target=\"_blank\">" + " Clique</a>");
-                SBMensagem.AppendLine("Valor: " + anuncio.Valor);
-                SBMensagem.AppendLine("Data da Publicação: " + anuncio.DataPublicacao);
-                SBMensagem.AppendLine("---------------------------------------------");
+                SBMensagem.Append("Código: " + anuncio.Codigo + "</br>");
+                SBMensagem.Append("Título: " + anuncio.Titulo + "</br>");
+                SBMensagem.Append("Link: " + "<a href= \"" + anuncio.Link + "\"" + " target=\"_blank\">" + " Clique</a>" + "</br>");
+                SBMensagem.Append("Valor: " + anuncio.Valor + "</br>");
+                SBMensagem.Append("Data da Publicação: " + anuncio.DataPublicacao + "</br>");
+                SBMensagem.Append("---------------------------------------------" + "</br>");
             }
 
             var destinatario = Environment.GetEnvironmentVariable("OLX_SCRAPPER_DESTINATARIO");
