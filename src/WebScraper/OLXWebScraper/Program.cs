@@ -1,13 +1,12 @@
 ﻿using HtmlAgilityPack;
 using OLXWebScraper.Class;
+using OLXWebScraper.Service;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net;
 using System.Linq;
-using System.Net.Mail;
+using System.Net;
 using System.Text;
-using OLXWebScraper.Service;
 
 namespace OLXWebScraper
 {
